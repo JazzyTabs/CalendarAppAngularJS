@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+
+	<!--------------------Surported file for the date picker and the color picker--------------->
+	<link rel="stylesheet" href="style/pagestyle.css" media="screen, projection" />
+	<link rel="stylesheet" href="style/slimpicker.css" media="screen, projection" />
+	<script src="calender_includes/mootools-1.2.4-core-yc.js"></script>
+	<script src="calender_includes/mootools-1.2.4.4-more-yc.js"></script>
+	<script src="calender_includes/slimpicker.js"></script>
+	<script type="text/javascript" src="jscolor.js"></script>
+
+
+
+
+
+	<!----------------------------------------Closing Tshepo---------------------------->
+
+
+
+<link href='fullcalendar.css' rel='stylesheet' />
+<link href='fullcalendar.print.css' rel='stylesheet' media='print' />
+
+
+
+
+
+
+<script src='jquery/jquery-1.10.2.js'></script>
+<script src='jquery/jquery-ui.custom.min.js'></script>
+
+<!------------------------------------------The trouble solved h$.get('testing.php', { value:"dev_project", ID: $('#name').val(),project:$('#project').val() },function(output){
+						//$('#aa').html(output).fadeIn(1000);
+						var obj =  JSON.parse(output);
+						 devName = obj[0].name;
+						 devColor = obj[0].dev_Color;
+				         projectName = obj[0].project_Name;ere----------------------------------->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<link rel="stylesheet" href="/resources/demos/style.css"/>
+<!--End-->
+
+
+<script src='fullcalendar.js'></script>
+
+	<script src="js/vendor/modernizr.js"></script>
+
+	<link rel="stylesheet" href="Remodal-master/dist/remodal.css">
+	<link rel="stylesheet" href="Remodal-master/dist/remodal-default-theme.css">
+
+<!-- Starting of style imports -->
+	<!-- angularJS online library link-->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href="css/normalize.css" rel="stylesheet" media="screen">
+    <link href="css/foundation.min.css" rel="stylesheet" media="screen">
+    <!--<link href="css/app-screen.css" rel="stylesheet" media="screen">-->
+    <!--<link href="css/app-print.css" rel="stylesheet" media="print">-->
+    <!--<script src="js/angular.min.js"></script>-->
+    <!--<script src="js/angular-mocks.js"></script>-->
+    <!--<script src="js/shopping-list.js"></script>-->
+	<script src="js/moment.min.js"></script>
+	<script src="js/foundation/foundation.js"></script>
+	<!--<script src="jss/foundation/foundation.reveal.js"></script>-->
+
+<!-- End -->
+	<!--<script src="jss/vendor/modernizr.js"></script>-->
+	<!--<script src="jss/vendor/jquery.js"></script>-->
+	<!--<script src="jss/vendor/fastclick.js"></script>-->
+
+
+
+
+
+
+<script>
+
+	$(document).ready(function() {
+	    var date = new Date();
+		var d = date.getDate();
+		var m = date.getMonth();
+		var y = date.getFullYear();
+		console.log('date: ' + date);
+		console.log('d: ' + d);
+		console.log('m: ' + m);
+		console.log('y: ' + y);
+		
+		/*  className colors
+		
+		className: default(transparent), important(red), chill(pink), success(green), info(blue)
+		
+		*/		
+		
+		  
+		/* initialize the external events
+		-----------------------------------------------------------------*/
+	
+		$('#external-events div.external-event').each(function() {
+
+			// create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+			// it doesn't need to have a start or end
+			var eventObject = {
+				title: $.trim($(this).text()) // use the element's text as the event title
+			};
+
+			// store the Event Object in the DOM element so we can get to it later
+			$(this).data('eventObject', eventObject);
+
+			// make the event draggable using jQuery UI
+			$(this).draggable({
+				zIndex: 999,
+				revert: true,      // will cause the event to go back to its
+				revertDuration: 0  //  original position after the drag
+			});
+
+		});
+
+	
+		/* initialize the calendar
+		-----------------------------------------------------------------*/
+		
+		var calendar =  $('#calendar').fullCalendar({
+			header: {
+				left: 'title',
+				right: 'prev,next today'
+			},
+			editable: true,
+			firstDay: 1, //  1(Monday) this can be changed to 0(Sunday) for the USA system
+			selectable: true,
+			defaultView: 'month',
+			
+			axisFormat: 'h:mm',
+			columnFormat: {
+                month: 'ddd',    // Mon
+                week: 'ddd d', // Mon 7
+                day: 'dddd M/d',  // Monday 9/7
+                agendaDay: 'dddd d'
+            },
+            titleFormat: {
+                month: 'MMMM yyyy', // September 2009
+                week: "MMMM yyyy", // September 2009
+                day: 'MMMM yyyy'                  // Tuesday, Sep 8, 2009
+            },
+			allDaySlot: false,
+			selectHelper: true,
+			select: function(start, end, allDay) {
+
+				//var date = $.fullCalendar.formatDate(start,'ddd, MMM d, h:mm tt');
+				var date = $.fullCalendar.formatDate(start,'yyyy-MM-dd');
+				var from = date;
+				//$('#age').html(date).fadeIn(1000);
+
+
+				document.getElementById("demo").innerHTML = date;
+				//var modal = $.remodal.lookup[$('[data-remodal-id=addDeveloper]').data('remodal')];
+				modal = $('[data-remodal-id=addDeveloper]').remodal();
+				$('#start').val(from);
+				$('#datepicker').val("");
+
+				modal.open();
+
+
+							//Here we are going to post data
+							//Here we are going to have the the page that we are posting to and the variables that we are posting
+//							$.get('testing.php', { value:"projects" },
+//
+//
+//									function(output){
+//										$('#age').html(output).fadeIn(1000);
+//
+//									});
+
+
+				//calendar.fullCalendar('unselect');
+			},
+			droppable: true, // this allows things to be dropped onto the calendar !!!
+			drop: function(date, allDay) { // this function is called when something is dropped
+			
+				// retrieve the dropped element's stored Event Object
+				var originalEventObject = $(this).data('eventObject');
+				
+				// we need to copy it, so that multiple events don't have a reference to the same object
+				var copiedEventObject = $.extend({}, originalEventObject);
+				
+				// assign it the date that was reported
+				copiedEventObject.start = date;
+				copiedEventObject.allDay = allDay;
+				
+				// render the event on the calendar
+				// the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+				$('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+				
+				// is the "remove after drop" checkbox checked?
+				if ($('#drop-remove').is(':checked')) {
+					// if so, remove the element from the "Draggable Events" list
+					$(this).remove();
+				}
+				
+			},
+			
+			events: {
+				url: 'testing.php?value=events',
+				error: function() {
+					//$('#script-warning').show();
+				}
+			}
+		});
+		
+		
+	});
+
+
+</script>
+
+
+<style>
+
+	body {
+		margin-top: 40px;
+		text-align: center;
+		font-size: 14px;
+		font-family: "Helvetica Nueue",Arial,Verdana,sans-serif;
+		background-color: #DDDDDD;
+		}
+		
+	#wrap {
+		width: 1100px;
+		margin: 0 auto;
+		}
+		
+	#external-events {
+		float: left;
+		width: 150px;
+		padding: 0 10px;
+		text-align: left;
+		}
+		
+	#external-events h4 {
+		font-size: 16px;
+		margin-top: 0;
+		padding-top: 1em;
+		}
+		
+	.external-event { /* try to mimick the look of a real event */
+		margin: 10px 0;
+		padding: 2px 4px;
+		background: #3366CC;
+		color: #fff;
+		font-size: .85em;
+		cursor: pointer;
+		}
+		
+	#external-events p {
+		margin: 1.5em 0;
+		font-size: 11px;
+		color: #666;
+		}
+		
+	#external-events p input {
+		margin: 0;
+		vertical-align: middle;
+		}
+	#buttons {
+
+	}
+
+	#calendar {
+/* 		float: right; */
+        margin: 0 auto;
+		width: 900px;
+		background-color: #FFFFFF;
+		  border-radius: 6px;
+        box-shadow: 0 1px 2px #C3C3C3;
+		}
+
+
+</style>
+<script type="text/javascript" src="Jquery/jquery-1.11.3.js"></script>
+
+<!-- On page load -->
+<script type="text/javascript">
+    $(document).ready(function(){
+        modal = $('[data-remodal-id=userLogin]').remodal();
+        modal.open();
+    });
+
+
+</script>
+
+<script type="text/javascript">
+
+		//Using this function as a handler for the Get button
+//		function get(){
+		//			//Here we are going to post data
+		//			//Here we are going to have the the page that we are posting to and the variables that we are posting
+		//			$.get('testing.php', { value:"devs" },
+		//
+		//
+		//					function(output){
+		//						$('#age').html(output).fadeIn(1000);
+		//
+		//					});
+		//
+		//		}
+
+		function doSubmit(){
+
+			console.log("hi TT---");
+
+			//alert("form submitted");
+			//$("#createEventModal").modal('hide');
+			//Here we are going to post data
+			//Here we are going to have the the page that we are posting to and the variables that we are posting
+			$.get('testing.php', { value:"dev_project", ID: $('#name').val(),project:$('#project').val() },function(output){
+						//$('#aa').html(output).fadeIn(1000);
+						var obj =  JSON.parse(output);
+						 devName = obj[0].name;
+						 devColor = obj[0].dev_Color;
+				         projectName = obj[0].project_Name;
+				event_put();
+
+
+				console.log('--------------Date-------------------');
+				var dateA = new Date($('#datepicker').val());
+				var day = dateA.getDate();
+				var month = dateA.getMonth()+1;
+				var year = dateA.getFullYear();
+				console.log('date: ' + dateA);
+				console.log('d: ' + day);
+				console.log('m: ' + month);
+				console.log('y: ' + year);
+				console.log('--------------|||||---------------------');
+
+				var fullDate = year + "-" + month +"-" + day;
+				console.log("inside get---- " + devName );
+				endDatee = $('#datepicker').val();
+				$.get('testing.php', { value:"calendar_entry_INS", calendar_entry_endDate:  fullDate,calendar_entry_startDate: $('#start').val(), developer: $('#name').val(),project: $('#project').val()},function(output){});
+
+
+
+			});
+		}
+
+	function event_put(){
+		//var end = $.fullCalendar.formatDate($('#datepicker').val(),'yyyy-MM-dd');
+		//$('#age').html(end).fadeIn(1000);
+		endDatee = $('#datepicker').val();
+		$("#calendar").fullCalendar('renderEvent',
+				{
+					title: devName +" - "+ projectName,
+					start: new Date($('#start').val()),
+					end: moment().format(endDatee,"YYYY-mm-dd"),
+
+					color: devColor,
+					//allDay: ($('#apptAllDay').val() == "true"),
+
+
+				},
+
+				true);
+
+		console.log("inside calenda--- " + devName );
+		devName = "";
+		devColor = "";
+		projectName = "";
+		modal.close();
+
+	}
+
+
+
+
+
+
+
+function devModel(){
+		modal = $('[data-remodal-id=devADD]').remodal();
+		modal.open();
+	}
+
+
+	function loginADD(){
+       modal = $('[data-remodal-id=loginADD]').remodal();
+    	modal.open();
+
+	}
+
+
+	function devAdd(){
+		console.log("Dev submit clicked");
+//		console.log(" Name: "+ $('#dev_Name').val());
+//		console.log("Color: "+ $('#dev_color').val());
+		$.get('testing.php', { value: "dev_ins", name: $('#dev_Name').val(),color: "#"+$('#dev_color').val()},function(output){});
+		modal.close();
+
+	}
+//-------------------------Project Adding--------
+
+    function projectAdd(){
+        $.get('testing.php', { value: "project_INS", project_Name: $('#Add_Project').val()},function(output){});
+        modal.close();
+        console.log("Is working");
+    }
+//-------------------------Developer Adding-------
+    function registerUser(){
+        $.get('testing.php', { value: "user_INS", userName: $('#devName').val(),userEmail: $('#devEmail').val(),userPassword: $('#devPass2').val()},function(output){});
+        modal.close();
+    }
+
+ // Login modal configuration here
+    function userLoginT(){
+    	
+        modal = $('[data-remodal-id=userLogin]').remodal();
+    	modal.open();
+    }
+
+
+
+    // Getting all the needed values from the test page 
+function LoginSubmit(){
+	// check if button clicked
+	console.log("i am clicked");
+
+   $.get('testing.php',{ value: "user_Login_SEL", email: $('#loging_email').val() ,password: $('#loging_password').val()},function(output){
+
+
+      //Converting the json string to an object here
+      var obj =  JSON.parse(output);
+      errorLoging ="";
+      if(obj.length>0){
+
+         console.log(obj[0].email);
+         console.log(obj[0].password );
+         $('#errorLogin').html(errorLoging).fadeIn(1000);
+         modal.close();
+
+
+      }else{
+          errorLoging = "Incorrect username or password";
+         //console.log("Incorrect username or password");
+         $('#errorLogin').html(errorLoging).fadeIn(1000);
+      }
+
+   });
+}
+
+
+
+
+
+</script>
+</head>
+
+<body ng-app="calendarApp">
+
+<div id="aa"></div>
+
+<!-- --------------------Add_Project_Modal---------------------------------->
+
+<div class="remodal" data-remodal-id="addProject">
+	<button data-remodal-action="close" class="remodal-close"></button>
+
+	<form>
+		<div class="row">
+			<div class="large-12 columns">
+				<label>Project Name
+				<input type="text" id="Add_Project" placeholder="Insert project name..."></label>
+
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-6 columns">
+				<button type="submit" class="expand " onclick="projectAdd()">Submit</button>
+			</div>
+			<div class="large-6 columns">
+				<button type="submit" class="expand alert">Clear</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<!-----------------------------Add_Event_Model------------->
+
+
+<div class="remodal" id="buttons" data-remodal-id="addDeveloper">
+	<button data-remodal-action="close" class="remodal-close"></button>
+
+	<!--<h1>Remodal</h1>-->
+	<!--<p>-->
+	<!--Responsive, lightweight, fast, synchronized with CSS animations, fully customizable modal window plugin with declarative configuration and hash tracking.-->
+	<!--</p>-->
+	<!--<br>-->
+	<!--<button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>-->
+	<!--<button data-remodal-action="confirm" class="remodal-confirm">OK</button>-->
+	<div id="age"></div>
+	<form name="form">
+		<div class="row" ng-controller="devscontroller">
+			<div class="large-12 columns">
+				<label >Developer Name
+					<select id="name">
+						<option value="-1" selected>Select developer</option>
+						<option ng-repeat="developer in devs"  value="{{ developer.ID }}">
+							{{developer.name}}
+						</option>
+
+					</select>
+				</label>
+			</div>
+		</div>
+		<div class="row" ng-controller="projectscontroller">
+			<div class="large-12 columns">
+				<label>Project Name
+					<select id="project">
+						<option value="-1" selected>Select project</option>
+						<option ng-repeat="project in projects"  value="{{ project.ID }}">
+							{{project.name}}
+						</option>
+					</select>
+				</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-12 columns">
+				<label>Start Date </label> <p id="demo" class="label secondary"></p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-12 columns">
+				<label>End Date
+
+					<input  type="text" id="datepicker">
+
+					<input  type="hidden" id="start">
+				</label>
+			</div>
+
+		</div>
+		<div class="row">
+			<div class="large-6 columns">
+				<button type="submit" class="expand " onclick="doSubmit()">Submit</button>
+			</div>
+			<div class="large-6 columns">
+				<button type="submit" class="expand alert" data-remodal-action="close">Clear</button>
+			</div>
+		</div>
+	</form>
+</div>
+<!----------Add Dev---------------------------------------->
+
+<div class="remodal" data-remodal-id="devADD">
+	<button data-remodal-action="close" class="remodal-close"></button>
+
+	<form name="form2">
+		<div class="row">
+			<div class="large-12 columns">
+				<label>Developer Name
+					<input type="text" id="dev_Name" placeholder="Insert developer name..." ></label>
+
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-12 columns">
+
+				<label>Developer Schedule Color
+					<!--Color picker opening -->
+
+					<input type="text" id="dev_color" class="color" value="Color" ></label>
+
+				<!--color picker closing -->
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="large-6 columns">
+				<button type="submit" class="expand " onclick="devAdd()">Submit</button>
+			</div>
+			<div class="large-6 columns">
+				<button type="submit" class="expand alert" data-remodal-action="close">Clear</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<!-------------Adding user----->
+<div class="remodal" data-remodal-id="register">
+	<button data-remodal-action="close" class="remodal-close"></button>
+<form>
+<!--------------adding a user for projects-------------------------------------->
+	<div class="row">
+		<div class="large-12 columns">
+			<label>Developer Name
+				<input type="text" id="devName" placeholder="Insert dev name..."></label>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="large-12 columns">
+			<label>Developer Email
+				<input type="text" id="devEmail" placeholder="Insert dev email..."></label>
+
+		</div>
+	</div>
+
+    <div class="row">
+        <div class="large-12 columns">
+            <label>User Password
+                <input type="password" id="devPass" placeholder="Insert password"></label>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 columns">
+            <label>Confirm Password
+                <input type="password" id="devPass2" placeholder="Insert password"></label>
+
+        </div>
+    </div>
+
+	<div class="row">
+		<div class="large-6 columns">
+			<button type="submit" class="expand" onclick="registerUser()">Submit</button>
+		</div>
+		<div class="large-6 columns">
+			<button type="submit" class="expand alert">Clear</button>
+		</div>
+	</div>
+</form>
+
+
+
+
+
+
+</div>
+<!-- Closing  -->
+
+
+<!-- loging section by Tshepo -->
+<!--ng-app='app' ng-controller='Loging'-->
+<div class="remodal"  data-remodal-id="userLogin"  data-remodal-options="closeOnEscape: false, closeOnOutsideClick: false">
+
+  <div id="errorLogin"></div>
+
+	<form>
+
+		<div class="row">
+			<div class="large-12 columns">
+				<label> Email
+					<input type="text" placeholder="Insert email..." required=" "   id="loging_email" ></label>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="large-12 columns">
+				<label> Password
+					<input type="password" placeholder="Insert password..." required=" " id="loging_password"></label>
+
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="large-6 columns">
+				<button type="submit" class="expand " onclick="LoginSubmit()">Submit</button>
+			</div>
+			<div class="large-6 columns">
+				<button type="submit" class="expand alert" data-remodal-action="close">Clear</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+<!-- Closing -->
+
+
+
+
+<div id='wrap'>
+
+	<!-- Menu -->
+	<dl class="sub-nav" role="menu" title="Filter Menu List">
+        <dt style="color: royalblue"><img src="ES_logo_white_2.png"  style="width: 100px"; style="height:150px";></dt>
+		<dd role="menuitem"><a onclick="devModel()">Developer</a></dd>
+		<dd role="menuitem"><a href="#addProject ">Project </a></dd>
+		<dd role="menuitem"><a href="#register">Register</a></dd>
+	   <dd role="menuitem"><a onclick="userLoginT()">Logout</a></dd>
+     
+
+
+	</dl>
+	<div id='calendar'></div>
+	<div style='clear:both'></div>
+</div>
+
+
+<script src="Remodal-master/dist/remodal.min.js"></script>
+<script>
+//	datepicker function
+	$(function() {
+		$( "#datepicker" ).datepicker();
+	});
+
+	//angular
+	var app = angular.module('calendarApp',[]);
+	app.controller('devscontroller',['$scope','$http',function($scope,$http){
+
+			$http.get("testing.php",{params:{"value":"devs"}}).success(function(response){
+				$scope.devs = response;
+			});
+
+	}]);
+	app.controller('projectscontroller',['$scope','$http',function($scope,$http){
+
+		$http.get("testing.php",{params:{"value":"projects"}}).success(function(response){
+			$scope.projects=response;
+		});
+
+	}]);
+//s
+//	var myApp = angular.module('myApp',[]);
+//
+//	myApp.controller('GreetingController', ['$scope', function($scope) {
+//		$scope.greeting = 'Hola!';
+//	}]);
+
+</script>
+
+<script type="text/javascript">
+    window.onload = function () {
+        document.getElementById("devPass").onchange = validatePassword;
+        document.getElementById("devPass2").onchange = validatePassword;
+    }
+    function validatePassword(){
+        var pass2=document.getElementById("devPass2").value;
+        var pass1=document.getElementById("devPass").value;
+        if(pass1!=pass2)
+            document.getElementById("devPass2").setCustomValidity("Passwords Don't Match");
+        else
+            document.getElementById("devPass2").setCustomValidity('');
+//empty string means no validation error
+    }
+</script>
+
+</body>
+</html>
